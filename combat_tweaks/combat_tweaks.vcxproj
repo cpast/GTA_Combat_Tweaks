@@ -14,7 +14,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{bcb5553c-9bf7-4e71-bf98-c8f4fbf5c372}</ProjectGuid>
-    <RootNamespace>arrest_npcs</RootNamespace>
+    <RootNamespace>combat_tweaks</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>combat_tweaks</ProjectName>
   </PropertyGroup>
