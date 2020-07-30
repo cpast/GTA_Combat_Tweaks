@@ -15,18 +15,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="misc_tweaks.h">
+    <ClInclude Include="sub_weapons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
+    <NASM Include="patch.nasm">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="misc_tweaks.cpp">
+    </NASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sub_weapons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
