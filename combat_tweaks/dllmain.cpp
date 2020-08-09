@@ -1,28 +1,17 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "framework.h"
-#include "hooking.h"
-#include "../boat_weapons/boat_weapons.h"
-#include "../sub_weapons/sub_weapons.h"
-#include "../WantedRadius/WantedRadius.h"
-#include "misc_tweaks.h"
-#include <MinHook.h>
-
-bool MH_success = false;
+#include "combat_tweaks.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
                      )
 {
+    Global::MH_success = false;
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        MH_success = MH_Initialize() == MH_OK;
-        BoatWeapons::EnableBoatWeapons();
-        MiscTweaks::EnableHighStarCopArrests();
-        MiscTweaks::TurnOffSearchPosDrift();
-        WantedRadius::EnableWantedRadius();
-        WantedRadius::SetupWantedRadiusColorHook();
+        Global::SetupHook();
         break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:

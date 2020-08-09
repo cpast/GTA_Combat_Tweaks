@@ -21,6 +21,9 @@
     <ClInclude Include="misc_tweaks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="combat_tweaks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -29,8 +32,14 @@
     <ClCompile Include="misc_tweaks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="combat_tweaks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="combat_tweaks.ini" />
   </ItemGroup>
 </Project>

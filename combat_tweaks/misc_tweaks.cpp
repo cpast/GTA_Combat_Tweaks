@@ -1,6 +1,7 @@
 #include "hooking.h"
 #include "misc_tweaks.h"
-#include <Windows.h>
+#include "combat_tweaks.h"
+
 namespace MiscTweaks {
     bool EnableHighStarCopArrests() {
         Pattern ptn = { "48 85 c0 74 ?? 83 b8 ?? ?? ?? ?? 01 7f ?? 32 c0 48 83 c4 20", 0x80 };
@@ -25,11 +26,28 @@ namespace MiscTweaks {
         intptr_t off120 = *(int32_t*)(loc120 + 0x884) + loc120 + 0x888;
         if (!WriteForeignMemory(loc + 0x119, bytes, 5))
             return false;
-        int32_t offset = off120 - loc - 0x15f;
+        intptr_t offset2 = off120 - loc;
+        int32_t offset = (int32_t)offset2 - 0x15f;
         if (!WriteForeignMemory(loc + 0x15b, &offset, 4))
             return false;
-        offset = off120 - loc - 0x155;
+        offset2 = off120 - loc;
+        offset = (int32_t)offset2;
+        offset -= 0x155;
         return WriteForeignMemory(loc + 0x151, &offset, 4);
+    }
+
+    bool Initialize(std::map<std::string, std::string>& iniData)
+    {
+        int enabled = Global::SafeGetInt(iniData, "EnableCopArrestsAboveOneStar", 0);
+        if (enabled != 0) {
+            if (!EnableHighStarCopArrests())
+                return false;
+        }
+        enabled = Global::SafeGetInt(iniData, "DisableCopSixthSense", 0);
+        if (enabled != 0) {
+            return TurnOffSearchPosDrift();
+        }
+        return true;
     }
 
 }

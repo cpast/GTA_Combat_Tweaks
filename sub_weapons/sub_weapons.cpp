@@ -1,12 +1,25 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "hooking.h"
 #include "sub_weapons.h"
+#include "../combat_tweaks/combat_tweaks.h"
 #include <Windows.h>
 
 namespace SubWeapons {
     Pattern SpawnSubtaskPattern = { "c7 45 ?? 00 00 02 80 ba c0 01 00 00 41 b8 10 00 00 00 f3 0f 11 45 ?? f3 0f 10 8e ?? ?? ?? ?? f3 0f 11 4d", 0x82 };
     Pattern CreateTaskVehicleCombatPattern = { "48 8b c4 48 89 58 08 48 89 68 10 48 89 70 18 57 48 83 ec 30 0f 29 70 e8 41 8b d8 48 8b f2 0f 28 f3 48 8b f9", 0 };
     Pattern SwitchWeaponsPattern = { "48 8b 83 ?? ?? ?? ?? 48 85 c0 0f 84 ?? ?? ?? ?? 83 b8 ?? ?? ?? ?? 05 0f 85", 0x14b };
+
+    bool Initialize(std::map<std::string, std::string>& iniData)
+    {
+        int enabled = Global::SafeGetInt(iniData, "Enabled");
+        if (enabled == -1) {
+            return false;
+        }
+        if (enabled == 0) {
+            return true;
+        }
+        return EnableAiUse();
+    }
 
     bool EnableAiUse(void) {
         uintptr_t funcAddress = FindPattern(SpawnSubtaskPattern);

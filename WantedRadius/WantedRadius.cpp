@@ -2,6 +2,7 @@
 //
 
 #include "WantedRadius.h"
+#include "../combat_tweaks/combat_tweaks.h"
 #include "hooking.h"
 #include <cstdint>
 #include <MinHook.h>
@@ -27,6 +28,8 @@ namespace WantedRadius
 		Pattern wlrMinimapPtn = { "b9 fa 00 00 00 84 c0 41 8b c6 0f 45 d9 2b c6 3b c3", 0x1df };
 		uintptr_t blipColorLoc = FindPattern(blipColorPtn);
 		uintptr_t wlrMinimapLoc = FindPattern(wlrMinimapPtn);
+		if (!Global::MH_success)
+			return false;
 		if (wlrMinimapLoc == NULL || blipColorLoc == NULL)
 			return false;
 		if (MH_CreateHook((void*)blipColorLoc, &HookBlipColorToHudColor, (LPVOID*)&BlipColorToHudColor) != MH_OK)
@@ -36,6 +39,25 @@ namespace WantedRadius
 		if (WLR_Minimap_Return == NULL)
 			return false;
 		return MH_EnableHook((void*)blipColorLoc) == MH_OK;
+	}
+
+	bool Initialize(std::map<std::string, std::string>& iniData)
+	{
+		int enabled = Global::SafeGetInt(iniData, "Enabled");
+		if (enabled == -1) {
+			return false;
+		}
+		if (enabled == 0) {
+			return true;
+		}
+		bool bSuccess = EnableWantedRadius();
+		if (!bSuccess)
+			return false;
+		WLR_Flash_Time = Global::SafeGetInt(iniData, "OutOfSightFlashRate", 750);
+		enabled = Global::SafeGetInt(iniData, "FlashGrayWhenNotSeen", 0);
+		if (enabled != 0)
+			return SetupWantedRadiusColorHook();
+		return true;
 	}
 
 	bool EnableWantedRadius()

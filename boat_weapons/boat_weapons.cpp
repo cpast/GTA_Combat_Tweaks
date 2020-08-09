@@ -1,8 +1,20 @@
 #include "boat_weapons.h"
 #include <cstdint>
 #include "hooking.h"
+#include "../combat_tweaks/combat_tweaks.h"
 
 namespace BoatWeapons {
+    bool Initialize(std::map<std::string, std::string>& iniData)
+    {
+        int enabled = Global::SafeGetInt(iniData, "Enabled");
+        if (enabled == -1) {
+            return false;
+        }
+        if (enabled == 0) {
+            return true;
+        }
+        return EnableBoatWeapons();
+    }
     bool EnableBoatWeapons() {
         Pattern boatCheck = { "41 83 b9 ?? ?? ?? ?? 0d 75 03 b0 01 c3", 0x28 };
         uintptr_t boatCheckFunc = FindPattern(boatCheck);

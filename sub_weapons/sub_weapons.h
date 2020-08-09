@@ -1,5 +1,8 @@
 #pragma once
 #include <cstdint>
+#include <map>
+#include <string>
+
 namespace SubWeapons {
 	extern "C" {
 		extern uintptr_t SW_AllocateFromPool;
@@ -13,5 +16,6 @@ namespace SubWeapons {
 		extern uintptr_t SW_PatchAutoSwitch;
 		extern int32_t SW_VehicleTypeOffset;
 	}
+	bool Initialize(std::map<std::string, std::string>& iniData);
 	bool EnableAiUse();
 }

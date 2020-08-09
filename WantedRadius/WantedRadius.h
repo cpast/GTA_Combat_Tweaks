@@ -1,7 +1,10 @@
 #pragma once
 #include <cstdint>
+#include <map>
+#include <string>
 namespace WantedRadius
 {
+	bool Initialize(std::map<std::string, std::string>& iniData);
 	bool EnableWantedRadius();
 	bool SetupWantedRadiusColorHook();
 	extern "C" {
