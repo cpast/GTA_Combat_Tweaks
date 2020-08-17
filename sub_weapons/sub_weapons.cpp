@@ -18,7 +18,29 @@ namespace SubWeapons {
         if (enabled == 0) {
             return true;
         }
-        return EnableAiUse();
+        if (Global::SafeGetInt(iniData, "SubWeaponsAutoSwitch", 0) != 0) {
+            if (!EnableAutoSwitch())
+                return false;
+        }
+        if (Global::SafeGetInt(iniData, "EnableAiWeaponUse", 0) != 0) {
+            if (!EnableAiUse())
+                return false;
+        }
+        return true;
+    }
+
+    bool EnableAutoSwitch(void) {
+        uintptr_t funcAddress = FindPattern(SwitchWeaponsPattern);
+        if (funcAddress == NULL)
+            return false;
+        SW_PatchAutoSwitchRetFail = GetReferencedAddress(funcAddress + 0x155);
+        SW_VehicleTypeOffset = *(int32_t*)(funcAddress + 0x15d);
+        if (SW_PatchAutoSwitchRetFail == NULL || SW_VehicleTypeOffset == NULL)
+            return false;
+        SW_PatchAutoSwitchRetSucceed = InsertHookWithSkip(funcAddress + 0x15b, funcAddress + 0x168, (uintptr_t)&SW_PatchAutoSwitch);
+        if (SW_PatchMakeTaskRet == NULL)
+            return false;
+        return true;
     }
 
     bool EnableAiUse(void) {
@@ -33,17 +55,6 @@ namespace SubWeapons {
             return false;
         uintptr_t targetAddress = funcAddress + 0x130;
         SW_PatchMakeTaskRet = InsertHookWithSkip(targetAddress, targetAddress + 3, (uintptr_t)&SW_PatchMakeTask);
-        if (SW_PatchMakeTaskRet == NULL)
-            return false;
-
-        funcAddress = FindPattern(SwitchWeaponsPattern);
-        if (funcAddress == NULL)
-            return false;
-        SW_PatchAutoSwitchRetFail = GetReferencedAddress(funcAddress + 0x155);
-        SW_VehicleTypeOffset = *(int32_t*)(funcAddress + 0x15d);
-        if (SW_PatchAutoSwitchRetFail == NULL || SW_VehicleTypeOffset == NULL)
-            return false;
-        SW_PatchAutoSwitchRetSucceed = InsertHookWithSkip(funcAddress + 0x15b, funcAddress + 0x168, (uintptr_t)&SW_PatchAutoSwitch);
         if (SW_PatchMakeTaskRet == NULL)
             return false;
         return true;

@@ -87,7 +87,7 @@ bool Global::SetupHook() {
     Global::MH_success = MH_Initialize() == MH_OK;
     bool bSuccess = true;
     PROCESS_MODULE(BoatWeapons,"Boat Weapons", bSuccess);
-    PROCESS_MODULE(SubWeapons, "Submarine Combat AI", bSuccess);
+    PROCESS_MODULE(SubWeapons, "Submarine Weapons", bSuccess);
     PROCESS_MODULE(MiscTweaks, "Miscellaneous Tweaks", bSuccess);
     PROCESS_MODULE(WantedRadius, "Wanted Radius", bSuccess);
     return bSuccess;

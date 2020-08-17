@@ -18,4 +18,5 @@ namespace SubWeapons {
 	}
 	bool Initialize(std::map<std::string, std::string>& iniData);
 	bool EnableAiUse();
+	bool EnableAutoSwitch();
 }
