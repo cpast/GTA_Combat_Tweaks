@@ -2,6 +2,8 @@
 #include "../boat_weapons/boat_weapons.h"
 #include "../sub_weapons/sub_weapons.h"
 #include "../WantedRadius/WantedRadius.h"
+#include "../GasMaskPeds/GasMaskPeds.h"
+#include "../DispatchTuning/DispatchTuning.h"
 #include "misc_tweaks.h"
 #include "combat_tweaks.h"
 #include <MinHook.h>
@@ -83,6 +85,23 @@ int Global::SafeGetInt(const std::map<std::string, std::string>& iniData, const 
     return Global::SafeGetInt(iniData, key, -1);
 }
 
+float Global::SafeGetFloat(const std::map<std::string, std::string>& iniData, const std::string& key, float fallback = -1)
+{
+    if (iniData.count(key) == 0)
+        return fallback;
+    float retVal = fallback;
+    try {
+        retVal = std::stof(iniData.at(key));
+    }
+    catch (const std::invalid_argument& ia) {
+        return fallback;
+    }
+    catch (const std::out_of_range& oor) {
+        return fallback;
+    }
+    return retVal;
+}
+
 bool Global::SetupHook() {
     Global::MH_success = MH_Initialize() == MH_OK;
     bool bSuccess = true;
@@ -90,5 +109,7 @@ bool Global::SetupHook() {
     PROCESS_MODULE(SubWeapons, "Submarine Weapons", bSuccess);
     PROCESS_MODULE(MiscTweaks, "Miscellaneous Tweaks", bSuccess);
     PROCESS_MODULE(WantedRadius, "Wanted Radius", bSuccess);
+    PROCESS_MODULE(GasMaskPeds, "Gas Mask Peds", bSuccess);
+    PROCESS_MODULE(DispatchTuning, "Dispatch Tuning", bSuccess);
     return bSuccess;
 }
