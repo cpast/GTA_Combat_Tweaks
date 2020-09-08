@@ -10,3 +10,8 @@ namespace Global
 	int SafeGetInt(const std::map<std::string, std::string>& iniData, const std::string& key, int fallback);
 	bool SetupHook();
 }
+
+extern "C"
+{
+	extern int(*gtaRand)(void);
+}

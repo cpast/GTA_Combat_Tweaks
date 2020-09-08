@@ -117,6 +117,9 @@ xcopy "$(TargetDir)\combat_tweaks.ini" "C:\Program Files\Rockstar Games\Grand Th
     <ProjectReference Include="..\boat_weapons\boat_weapons.vcxproj">
       <Project>{252ff68a-bda9-4012-8f46-449ffb3bb338}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\DispatchTuning\DispatchTuning.vcxproj">
+      <Project>{a4a99edc-d2e6-41eb-ae45-7062a64e75db}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\GasMaskPeds\GasMaskPeds.vcxproj">
       <Project>{90cf91b0-fc9d-4e4d-b094-f46763e426a4}</Project>
     </ProjectReference>

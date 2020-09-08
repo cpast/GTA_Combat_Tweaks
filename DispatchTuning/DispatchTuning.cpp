@@ -9,7 +9,8 @@ namespace DispatchTuning
 {
 	Pattern policePassengerSpawnPattern = { "41 8b f1 45 8a d0 c1 e8 1f 40 8a ea 41 84 c4", 0x30 };
 	Pattern createCopPattern = { "83 c8 01 ba ea 33 1b b0", 0x70 };
-
+	Pattern pickCarDriverPattern = { "41 23 c5 33 d0 81 e2 00 00 00 10 33 c2 23 c6 41 23 c6", 0x67 };
+	
 
 	bool SetupPoliceAutoFlagReq()
 	{
@@ -28,6 +29,19 @@ namespace DispatchTuning
 		return (NopInstruction(createCopLoc + 0x8f) != NULL);
 	}
 
+	bool EnableRandomizeVehicleOccupants()
+	{
+		if (gtaRand == NULL)
+			return false;
+		DT_gtaRand = (uintptr_t)gtaRand;
+		uintptr_t pickDriverLoc = FindPattern(pickCarDriverPattern);
+		if (pickDriverLoc == NULL)
+			return false;
+		DT_ClassOffsets_CVehicleModelInfo_NumPeds = *(int32_t*)(pickDriverLoc + 0x8e);
+		DT_GetVehicleOccupant_ret = InsertHookWithSkip(pickDriverLoc + 0x81, pickDriverLoc + 0x8a, (uintptr_t)&DT_GetVehicleOccupant_patch);
+		return (DT_GetVehicleOccupant_ret != NULL);
+	}
+
 	bool Initialize(std::map<std::string, std::string>& iniData)
 	{
 		int enabled = Global::SafeGetInt(iniData, "Enabled");
@@ -44,6 +58,10 @@ namespace DispatchTuning
 		enabled = Global::SafeGetInt(iniData, "DisableForcedAmbientCopLoadout", 0);
 		if (enabled != 0)
 			if (!DisableForcedAmbientLoadout())
+				return false;
+		enabled = Global::SafeGetInt(iniData, "RandomizeVehicleOccupants", 0);
+		if (enabled != 0)
+			if (!EnableRandomizeVehicleOccupants())
 				return false;
 		return true;
 	}

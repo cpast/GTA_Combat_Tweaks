@@ -85,7 +85,7 @@ int Global::SafeGetInt(const std::map<std::string, std::string>& iniData, const 
     return Global::SafeGetInt(iniData, key, -1);
 }
 
-float Global::SafeGetFloat(const std::map<std::string, std::string>& iniData, const std::string& key, float fallback = -1)
+float Global::SafeGetFloat(const std::map<std::string, std::string>& iniData, const std::string& key, float fallback)
 {
     if (iniData.count(key) == 0)
         return fallback;
@@ -102,9 +102,13 @@ float Global::SafeGetFloat(const std::map<std::string, std::string>& iniData, co
     return retVal;
 }
 
+extern "C" int(*gtaRand)() = NULL;
+
 bool Global::SetupHook() {
     Global::MH_success = MH_Initialize() == MH_OK;
     bool bSuccess = true;
+    Pattern gtaRandPtn = { "8b 48 1c 69 c9 fd 43 03 00 81 c1 c3 9e 26 00", 0x9 };
+    gtaRand = (int(*)())FindPattern(gtaRandPtn);
     PROCESS_MODULE(BoatWeapons,"Boat Weapons", bSuccess);
     PROCESS_MODULE(SubWeapons, "Submarine Weapons", bSuccess);
     PROCESS_MODULE(MiscTweaks, "Miscellaneous Tweaks", bSuccess);
