@@ -36,7 +36,7 @@ namespace GasMaskPeds
 	}
 
 	bool SetupIgnoreSmoke() {
-		Pattern blockPattern = { "48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 57 41 56 41 57 48 83 ec 30 41 83 cf ff", 0x0 };
+		Pattern blockPattern = { "48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 57 41 56 41 57 48 83 ec 30 41 83 cf ff 41", 0x0 };
 		uintptr_t blockLoc = FindPattern(blockPattern);
 		if (blockLoc == NULL)
 			return false;
