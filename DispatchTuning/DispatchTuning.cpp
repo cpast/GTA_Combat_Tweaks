@@ -21,8 +21,6 @@ namespace DispatchTuning
 		int8_t offset = 0;
 		offset = *(int8_t*)(swatLoc + 0xa1);
 		offset -= 0x10;
-		if (!WriteForeignMemory(swatLoc + 0xe0, &jmp, 1))
-			return false;
 		if (!WriteForeignMemory(swatLoc + 0xe1, &offset, 1))
 			return false;
 		if (!preserveHangers)
