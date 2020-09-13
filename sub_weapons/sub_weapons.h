@@ -15,8 +15,12 @@ namespace SubWeapons {
 		extern uintptr_t SW_PatchMakeTask;
 		extern uintptr_t SW_PatchAutoSwitch;
 		extern int32_t SW_VehicleTypeOffset;
+		extern uintptr_t SW_GetDuskCheck_addr;
+		extern uintptr_t SW_GetDuskCheck_ret;
+		extern uintptr_t SW_GetDuskCheck_patch;
 	}
 	bool Initialize(std::map<std::string, std::string>& iniData);
 	bool EnableAiUse();
 	bool EnableAutoSwitch();
+	bool EnableDaytimeSearchlights();
 }

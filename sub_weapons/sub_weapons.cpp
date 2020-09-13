@@ -26,10 +26,15 @@ namespace SubWeapons {
             if (!EnableAiUse())
                 return false;
         }
+        if (Global::SafeGetInt(iniData, "EnableDaytimeSearchlights", 0) != 0) {
+            if (!EnableDaytimeSearchlights())
+                return false;
+        }
         return true;
     }
 
-    bool EnableAutoSwitch(void) {
+    bool EnableAutoSwitch(void)
+    {
         uintptr_t funcAddress = FindPattern(SwitchWeaponsPattern);
         if (funcAddress == NULL)
             return false;
@@ -43,7 +48,8 @@ namespace SubWeapons {
         return true;
     }
 
-    bool EnableAiUse(void) {
+    bool EnableAiUse(void)
+    {
         uintptr_t funcAddress = FindPattern(SpawnSubtaskPattern);
         if (funcAddress == NULL)
             return false;
@@ -56,6 +62,21 @@ namespace SubWeapons {
         uintptr_t targetAddress = funcAddress + 0x130;
         SW_PatchMakeTaskRet = InsertHookWithSkip(targetAddress, targetAddress + 3, (uintptr_t)&SW_PatchMakeTask);
         if (SW_PatchMakeTaskRet == NULL)
+            return false;
+        return true;
+    }
+
+    bool EnableDaytimeSearchlights(void)
+    {
+        Pattern duskCheckerPattern = { "b9 3f 00 f8 00 e8 ?? ?? ?? ?? 45 0f 57 c0 44 0f 28 d0", 0x0 };
+        uintptr_t duskChecker = FindPattern(duskCheckerPattern);
+        if (duskChecker == NULL)
+            return false;
+        uintptr_t funcaddr = duskChecker + 0xa;
+        funcaddr += *(int*)(funcaddr - 4);
+        SW_GetDuskCheck_addr = funcaddr;
+        SW_GetDuskCheck_ret = InsertHookWithSkip(duskChecker, duskChecker + 0xa, (uintptr_t)&SW_GetDuskCheck_patch);
+        if (SW_GetDuskCheck_ret == NULL)
             return false;
         return true;
     }

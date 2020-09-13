@@ -108,6 +108,8 @@
   <ItemGroup>
     <NASM Include="patch.nasm">
       <FileType>Document</FileType>
+      <SymbolsPrefix Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SW_</SymbolsPrefix>
+      <SymbolsPrefix Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SW_</SymbolsPrefix>
     </NASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
