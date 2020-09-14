@@ -11,21 +11,41 @@ namespace DispatchTuning
 	Pattern createCopPattern = { "83 c8 01 ba ea 33 1b b0", 0x70 };
 	Pattern pickCarDriverPattern = { "41 23 c5 33 d0 81 e2 00 00 00 10 33 c2 23 c6 41 23 c6", 0x67 };
 	
-	bool EliminateSwatAutoRestriction(bool preserveHangers)
+	bool EliminateSwatAutoRestriction(int hangersType)
 	{
 		Pattern swatDispatchPassengerPtn = { "48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 57 41 56 41 57 48 83 ec 50 48 8b 41", 0 };
 		uintptr_t swatLoc = FindPattern(swatDispatchPassengerPtn);
 		if (swatLoc == NULL)
 			return false;
+		if (!NopInstruction(swatLoc + 0x47))
+			return false;
 		uint8_t jmp = 0xeb;
 		int8_t offset = 0;
 		offset = *(int8_t*)(swatLoc + 0xa1);
 		offset -= 0x10;
-		if (!WriteForeignMemory(swatLoc + 0xb1, &offset, 1))
-			return false;
-		if (!preserveHangers)
+		if (hangersType == 0)
+		{
+			return NopInstruction(swatLoc + 0xb0) != NULL;
+		}
+		else if (hangersType == 1)
+		{
+			return WriteForeignMemory(swatLoc + 0xb1, &offset, 1);
+		}
+		else if (hangersType == 2)
+		{
 			return WriteForeignMemory(swatLoc + 0xa0, &jmp, 1);
-		return true;
+		}
+		return false;
+	}
+
+	bool EnableFourManSwat()
+	{
+		Pattern swatDispatchPassengerPtn = { "48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 57 41 56 41 57 48 83 ec 50 48 8b 41", 0 };
+		uintptr_t swatLoc = FindPattern(swatDispatchPassengerPtn);
+		if (swatLoc == NULL)
+			return false;
+		int32_t one = 1;
+		return WriteForeignMemory(swatLoc + 0x137, &one, 4);
 	}
 
 	bool SetupPoliceAutoFlagReq()
@@ -72,12 +92,16 @@ namespace DispatchTuning
 			if (!SetupPoliceAutoFlagReq())
 				return false;
 		enabled = Global::SafeGetInt(iniData, "RemoveSwatAutomobileRestriction", 0);
-		if (enabled != 0) {
-			int preserveHangers = Global::SafeGetInt(iniData, "DisableSwatStraphangers", 0);
-			if (!EliminateSwatAutoRestriction(preserveHangers != 0))
+		if (enabled != 0)
+		{
+			int disableHangers = Global::SafeGetInt(iniData, "DisableSwatStraphangers", 0);
+			if (!EliminateSwatAutoRestriction(disableHangers))
 				return false;
 		}
-			
+		enabled = Global::SafeGetInt(iniData, "FourManSwatCars", 0);
+		if (enabled != 0)
+			if (!EnableFourManSwat())
+				return false;
 		enabled = Global::SafeGetInt(iniData, "DisableForcedAmbientCopLoadout", 0);
 		if (enabled != 0)
 			if (!DisableForcedAmbientLoadout())
