@@ -33,7 +33,7 @@ GetVehicleOccupant_patch:
 	push r10
 	push r11
 	mov r10d, [rel ClassOffsets_CVehicleModelInfo_NumPeds]
-	mov r11d, [rax + r10]
+	movzx r11d, word [rax + r10]
 	test r11d, r11d
 	jz .skip
 	push r11

@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GasMaskPeds", "GasMaskPeds\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DispatchTuning", "DispatchTuning\DispatchTuning.vcxproj", "{A4A99EDC-D2E6-41EB-AE45-7062A64E75DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DriveBys", "DriveBys\DriveBys.vcxproj", "{57958C97-1D51-4FBD-82A7-E1FA7E1A5F35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -55,6 +57,10 @@ Global
 		{A4A99EDC-D2E6-41EB-AE45-7062A64E75DB}.Debug|x64.Build.0 = Debug|x64
 		{A4A99EDC-D2E6-41EB-AE45-7062A64E75DB}.Release|x64.ActiveCfg = Release|x64
 		{A4A99EDC-D2E6-41EB-AE45-7062A64E75DB}.Release|x64.Build.0 = Release|x64
+		{57958C97-1D51-4FBD-82A7-E1FA7E1A5F35}.Debug|x64.ActiveCfg = Debug|x64
+		{57958C97-1D51-4FBD-82A7-E1FA7E1A5F35}.Debug|x64.Build.0 = Debug|x64
+		{57958C97-1D51-4FBD-82A7-E1FA7E1A5F35}.Release|x64.ActiveCfg = Release|x64
+		{57958C97-1D51-4FBD-82A7-E1FA7E1A5F35}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
