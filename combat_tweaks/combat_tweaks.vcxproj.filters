@@ -40,9 +40,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <CopyFileToFolders Include="combat_tweaks.ini" />
   </ItemGroup>
 </Project>

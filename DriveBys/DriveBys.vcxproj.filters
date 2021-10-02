@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WantedRadius.cpp">
+    <ClCompile Include="DriveBys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WantedRadius.h">
+    <ClInclude Include="DriveBys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="patches.nasm">
+    <NASM Include="patches.nasm">
       <Filter>Source Files</Filter>
-    </None>
+    </NASM>
   </ItemGroup>
 </Project>

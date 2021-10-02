@@ -120,6 +120,9 @@ xcopy "$(TargetDir)\combat_tweaks.ini" "C:\Program Files\Rockstar Games\Grand Th
     <ProjectReference Include="..\DispatchTuning\DispatchTuning.vcxproj">
       <Project>{a4a99edc-d2e6-41eb-ae45-7062a64e75db}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\DriveBys\DriveBys.vcxproj">
+      <Project>{57958c97-1d51-4fbd-82a7-e1fa7e1a5f35}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\GasMaskPeds\GasMaskPeds.vcxproj">
       <Project>{90cf91b0-fc9d-4e4d-b094-f46763e426a4}</Project>
     </ProjectReference>
@@ -135,17 +138,9 @@ xcopy "$(TargetDir)\combat_tweaks.ini" "C:\Program Files\Rockstar Games\Grand Th
       <DeploymentContent>true</DeploymentContent>
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\..\..\..\..\Program Files\NASM\VSbuild\nasm.targets" />
-    <Import Project="..\packages\minhook.1.3.4\build\native\minhook.targets" Condition="Exists('..\packages\minhook.1.3.4\build\native\minhook.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\minhook.1.3.4\build\native\minhook.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\minhook.1.3.4\build\native\minhook.targets'))" />
-  </Target>
 </Project>

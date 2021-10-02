@@ -93,7 +93,10 @@
     <ClInclude Include="DriveBys.h" />
   </ItemGroup>
   <ItemGroup>
-    <NASM Include="patches.nasm" />
+    <NASM Include="patches.nasm">
+      <SymbolsPrefix Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DB_</SymbolsPrefix>
+      <SymbolsPrefix Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DB_</SymbolsPrefix>
+    </NASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

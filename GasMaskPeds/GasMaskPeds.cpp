@@ -6,7 +6,6 @@
 #include "../combat_tweaks/combat_tweaks.h"
 #include "../combat_tweaks/rage_structs.h"
 #include <hooking.h>
-#include <MinHook.h>
 
 namespace GasMaskPeds
 {
@@ -48,14 +47,14 @@ namespace GasMaskPeds
 	{
 		if (ped == NULL)
 			return false;
-		return (*(byte*)(ped + SmokeProofOffset) & 1);
+		return (*(uint8_t*)(ped + SmokeProofOffset) & 1);
 	}
 
 	void inline setPedSmokeProof(uintptr_t ped, bool proof)
 	{
 		if (ped == NULL)
 			return;
-		byte* flag = (byte*)(ped + SmokeProofOffset);
+		uint8_t* flag = (uint8_t*)(ped + SmokeProofOffset);
 		*flag &= 0xfe;
 		if (proof)
 			*flag |= 0x01;
