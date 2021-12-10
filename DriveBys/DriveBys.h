@@ -12,6 +12,8 @@ namespace DriveBys
 		extern uintptr_t DB_SmashWindowsGun_patch;
 		extern uintptr_t DB_SmashWindowsProjectile_ret;
 		extern uintptr_t DB_SmashWindowsProjectile_patch;
+		extern uintptr_t DB_CheckShouldLeaveVehicle_ret;
+		extern uintptr_t DB_CheckShouldLeaveVehicle_patch;
 		extern uint64_t DB_VehicleFlags_offset;
 	}
 }

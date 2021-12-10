@@ -7,6 +7,9 @@ SmashWindowsGun_ret dq 0
 GLOBAL SmashWindowsProjectile_ret
 SmashWindowsProjectile_ret dq 0
 
+GLOBAL CheckShouldLeaveVehicle_ret
+CheckShouldLeaveVehicle_ret dq 0
+
 GLOBAL VehicleFlags_offset
 VehicleFlags_offset dq 0
 
@@ -53,3 +56,17 @@ SmashWindowsProjectile_patch:
 	pop rdx
 	test ecx, ecx
 	jmp [rel SmashWindowsProjectile_ret]
+
+Global CheckShouldLeaveVehicle_patch
+CheckShouldLeaveVehicle_patch:
+	cmp eax, r12d
+	jbe .true
+	cmp eax, 3h
+	je .true
+	sub eax, 0000000bh
+	cmp eax, r12d
+	ja .skip
+.true:
+	mov dil, r12b
+.skip:
+	jmp [rel CheckShouldLeaveVehicle_ret]

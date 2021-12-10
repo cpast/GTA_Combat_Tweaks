@@ -29,6 +29,19 @@ namespace DriveBys
 		return true;
 	}
 
+	bool FixAtvDismounts()
+	{
+		Pattern checkShouldLeaveVehicle = { "41 3b c4 76 08 83 c0 f5 41 3b c4 77 03 41 8a fc", 0x279 };
+		uintptr_t checkLoc = FindPattern(checkShouldLeaveVehicle);
+		if (checkLoc == NULL)
+			return false;
+		uintptr_t retLoc = InsertHookWithSkip(checkLoc + 0x279, checkLoc + 0x289, (uintptr_t)&DB_CheckShouldLeaveVehicle_patch);
+		if (retLoc == NULL)
+			return false;
+		DB_CheckShouldLeaveVehicle_ret = retLoc;
+		return true;
+	}
+
 	bool Initialize(std::map<std::string, std::string>& iniData)
 	{
 		int enabled = Global::SafeGetInt(iniData, "Enabled");
@@ -41,6 +54,10 @@ namespace DriveBys
 		enabled = Global::SafeGetInt(iniData, "DontBreakBulletResistantWindows", 0);
 		if (enabled != 0)
 			if (!BlockBulletResistantSmashOuts())
+				return false;
+		enabled = Global::SafeGetInt(iniData, "LetAtvCopsDismount", 0);
+		if (enabled != 0)
+			if (!FixAtvDismounts())
 				return false;
 		return true;
 	}
