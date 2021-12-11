@@ -78,6 +78,25 @@ namespace DispatchTuning
 		return (DT_GetVehicleOccupant_ret != NULL);
 	}
 
+	bool EnableDirtRoadRoadblocks()
+	{
+		Pattern getSpawnPointsPtn = { "c7 45 b4 01 00 00 00 44 88 7d b8", 0x1a0 };
+		Pattern spawnPtn = { "44 89 65 a1 c7 45 a5 00 01 00 01", 0x24f };
+		Pattern spawnPtn2 = { "48 85 d2 74 ?? 0f bf 42 1c 48 8d 4c 24 20", 0x338 };
+		uintptr_t getSpawnPointsLoc = FindPattern(getSpawnPointsPtn);
+		uintptr_t spawnLoc = FindPattern(spawnPtn);
+		uintptr_t spawnLoc2 = FindPattern(spawnPtn2);
+		if (getSpawnPointsLoc == NULL || spawnLoc == NULL || spawnLoc2 == NULL)
+			return false;
+		uint8_t getSpawnPointsOverwrite[8] = { 0x01, 0x00, 0x01, 0x00, 0xC6, 0x45, 0xB8, 0x01 };
+		if (!WriteForeignMemory(getSpawnPointsLoc + 0x1a3, getSpawnPointsOverwrite, 8))
+			return false;
+		DT_RoadblockDirtRoads_ret = InsertHookWithSkip(spawnLoc + 0x24f, spawnLoc + 0x253, (uintptr_t)&DT_RoadblockDirtRoads_patch);
+		DT_RoadblockWater_ret_z = GetReferencedAddress(spawnLoc2 + 0x33b);
+		DT_RoadblockWater_ret_nz = InsertHook(spawnLoc2 + 0x33d, (uintptr_t)&DT_RoadblockWater_patch);
+		return (DT_RoadblockDirtRoads_ret != NULL && DT_RoadblockWater_ret_nz != NULL && DT_RoadblockWater_ret_z != NULL);
+	}
+
 	bool Initialize(std::map<std::string, std::string>& iniData)
 	{
 		int enabled = Global::SafeGetInt(iniData, "Enabled");
@@ -109,6 +128,10 @@ namespace DispatchTuning
 		enabled = Global::SafeGetInt(iniData, "RandomizeVehicleOccupants", 0);
 		if (enabled != 0)
 			if (!EnableRandomizeVehicleOccupants())
+				return false;
+		enabled = Global::SafeGetInt(iniData, "EnableDirtRoadRoadblocks", 0);
+		if (enabled != 0)
+			if (!EnableDirtRoadRoadblocks())
 				return false;
 		return true;
 	}

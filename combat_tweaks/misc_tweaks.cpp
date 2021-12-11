@@ -36,6 +36,16 @@ namespace MiscTweaks {
         return WriteForeignMemory(loc + 0x151, &offset, 4);
     }
 
+    bool AllowForcedPropsInScenarios()
+    {
+        Pattern ptn = { "8b 4c 04 54 85 4c 94 54 75 59 49 03 d1 49 3b d1", 0x52f };
+        uint8_t jmp = 0xeb;
+        uintptr_t loc = FindPattern(ptn);
+        if (loc == NULL)
+            return false;
+        return WriteForeignMemory(loc + 0x537, &jmp, 1);
+    }
+
     bool Initialize(std::map<std::string, std::string>& iniData)
     {
         int enabled = Global::SafeGetInt(iniData, "EnableCopArrestsAboveOneStar", 0);
@@ -46,6 +56,10 @@ namespace MiscTweaks {
         enabled = Global::SafeGetInt(iniData, "DisableCopSixthSense", 0);
         if (enabled != 0) {
             return TurnOffSearchPosDrift();
+        }
+        enabled = Global::SafeGetInt(iniData, "AllowForcedPropsInScenarios", 0);
+        if (enabled != 0) {
+            return AllowForcedPropsInScenarios();
         }
         return true;
     }

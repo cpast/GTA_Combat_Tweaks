@@ -13,6 +13,15 @@ gtaRand dq 0
 GLOBAL ClassOffsets_CVehicleModelInfo_NumPeds
 ClassOffsets_CVehicleModelInfo_NumPeds dd 0
 
+GLOBAL RoadblockDirtRoads_ret
+RoadblockDirtRoads_ret dq 0
+
+GLOBAL RoadblockWater_ret_nz
+RoadblockWater_ret_nz dq 0
+
+GLOBAL RoadblockWater_ret_z
+RoadblockWater_ret_z dq 0
+
 segment .text
 
 GLOBAL SpawnPolicePassengers_patch
@@ -58,3 +67,16 @@ GetVehicleOccupant_patch:
 	xor r14d, r14d
 	mov rbx, rax
 	jmp [rel GetVehicleOccupant_ret]
+
+GLOBAL RoadblockDirtRoads_patch
+RoadblockDirtRoads_patch:
+	mov dword [rbp - 5fh], 01000001h
+	jmp [rel RoadblockDirtRoads_ret]
+
+GLOBAL RoadblockWater_patch
+RoadblockWater_patch:
+	test byte [rdx + 24h], 20h
+	jnz .retz
+	jmp [rel RoadblockWater_ret_nz]
+.retz:
+	jmp [rel RoadblockWater_ret_z]
